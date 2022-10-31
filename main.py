@@ -52,6 +52,15 @@ def wait_class(class_name):
     return element
 
 
+def wait_text(text):
+    element = WebDriverWait(driver, 20).until(
+        EC.element_to_be_clickable(
+            (By.PARTIAL_LINK_TEXT, text)
+        )
+    )
+    return element
+
+
 def wait_frame_id(id):
     WebDriverWait(driver, 30).until(EC.frame_to_be_available_and_switch_to_it((By.ID, id)))
 
@@ -113,7 +122,7 @@ for each in loannum:
 
     wait_frame_id('dialogframe')
 
-    wait_xpath('//*[@id="StatusListBox"]/option[19]').click()
+    wait_text('PC Review Completed').click()
     time.sleep(2)
 
     switch_to_default_content()
