@@ -1,6 +1,3 @@
-# Create requirements: pip freeze > requirements.txt
-# Install requirements: pip install -r requirements.txt
-
 import time
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,9 +93,7 @@ time.sleep(5)
 df = pd.read_excel('C:/Users/serg.pudikov/QA Files/Change loan status.xlsx', sheet_name='Sheet1')
 loannum = df['loannu']
 print(loannum)
-okloans = []
 errloans = []
-
 
 for each in loannum:
     try:
@@ -107,7 +102,7 @@ for each in loannum:
         wait_id('FilterRadioButtonList_0').click()
         time.sleep(1)
         wait_xpath('//*[@id="SearchTextBox"]').send_keys(each)
-        time.sleep(2)
+        time.sleep(1)
         wait_xpath('//*[@id="SearchButton"]').click()
         switch_to_default_content()
         time.sleep(2)
@@ -115,43 +110,16 @@ for each in loannum:
         switch_to_frame(0)
         switch_to_frame(0)
         switch_to_frame(0)
-        time.sleep(2)
-        action = ActionChains(driver)
-        a = wait_xpath('//*[@id="PipelineRow1"]/td[2]')
-        action.double_click(a)
-        action.perform()
-        switch_to_default_content()
-        time.sleep(7)
-
-        wait_id('Change Status').click()
-        time.sleep(5)
-
-        wait_frame_id('dialogframe')
-
-        option = Select(wait_id('StatusListBox'))
-        option.select_by_visible_text('PC Review Completed')
-        time.sleep(2)
-
-        switch_to_default_content()
-
-        wait_xpath('//*[@id="btnOkay"]').click()
-        time.sleep(7)
-
-        okloans.append(each)
-        df1 = pd.DataFrame(data={'ok loans': okloans})
-        df1.to_excel('C:/Users/serg.pudikov/QA Files/okloans.xlsx')
-
-        assert wait_xpath('//*[@id="Row30"]/td[2]').text == 'PC Review Completed'
+        status = wait_xpath('//*[@id="PipelineRow1"]/td[6]')
+        assert status.text == 'PC Review Completed'
 
     except Exception as ex:
-
         errloans.append(each)
-        df2 = pd.DataFrame(data={'error loans': errloans})
-        df2.to_excel('C:/Users/serg.pudikov/QA Files/errloans.xlsx')
-        print(str(each) + ': Something went wrong')
+        dferr = pd.DataFrame(data={'error loans': errloans})
+        dferr.to_excel('C:/Users/serg.pudikov/QA Files/errloans_final.xlsx')
+        print(each + ': Something went wrong')
 
     finally:
         switch_to_default_content()
-        wait_id('ExitLoanli').click()
-        time.sleep(5)
         driver.refresh()
+        time.sleep(2)
