@@ -117,9 +117,9 @@ for each in loannum:
         errloans.append(each)
         dferr = pd.DataFrame(data={'error loans': errloans})
         dferr.to_excel('C:/Users/serg.pudikov/QA Files/errloans_final.xlsx')
-        print(each + ': Something went wrong')
+        print(str(each) + ': Something went wrong')
 
     finally:
         switch_to_default_content()
         driver.refresh()
-        time.sleep(2)
+        time.sleep(5)
