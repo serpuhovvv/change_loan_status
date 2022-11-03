@@ -1,4 +1,3 @@
-# Create requirements: pip freeze > requirements.txt
 # Install requirements: pip install -r requirements.txt
 
 import time
@@ -24,6 +23,10 @@ from bs4 import BeautifulSoup
 import requests
 from datetime import date
 from selenium.webdriver.support.select import Select
+
+
+login = ''
+password = ''
 
 
 def wait_xpath(xpath):
@@ -88,8 +91,8 @@ username = wait_xpath('//*[@id="UserName"]')
 password = wait_xpath('//*[@id="Password"]')
 login = wait_xpath('//*[@id="LoginButton"]')
 
-username.send_keys('spudikov')
-password.send_keys('ADMortgage2000!')
+username.send_keys(login)
+password.send_keys(password)
 login.click()
 time.sleep(5)
 

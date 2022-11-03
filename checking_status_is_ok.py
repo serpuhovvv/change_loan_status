@@ -23,6 +23,10 @@ from datetime import date
 from selenium.webdriver.support.select import Select
 
 
+login = ''
+password = ''
+
+
 def wait_xpath(xpath):
     element = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable(
@@ -85,8 +89,8 @@ username = wait_xpath('//*[@id="UserName"]')
 password = wait_xpath('//*[@id="Password"]')
 login = wait_xpath('//*[@id="LoginButton"]')
 
-username.send_keys('spudikov')
-password.send_keys('ADMortgage2000!')
+username.send_keys(login)
+password.send_keys(password)
 login.click()
 time.sleep(5)
 
