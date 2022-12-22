@@ -89,22 +89,22 @@ username = wait_xpath('//*[@id="UserName"]')
 password = wait_xpath('//*[@id="Password"]')
 login = wait_xpath('//*[@id="LoginButton"]')
 
-username.send_keys(login)
-password.send_keys(password)
+username.send_keys()
+password.send_keys()
 login.click()
 time.sleep(5)
 
-df = pd.read_excel('C:/Users/serg.pudikov/QA Files/Change loan status.xlsx', sheet_name='Sheet1')
+df = pd.read_excel('C:/Users/serg.pudikov/QA Files/Loansss.xlsx', sheet_name='Sheet1')
 loannum = df['loannu']
 print(loannum)
 errloans = []
+switch_to_frame(0)
+switch_to_frame(0)
+wait_id('FilterRadioButtonList_0').click()
+time.sleep(1)
 
 for each in loannum:
     try:
-        switch_to_frame(0)
-        switch_to_frame(0)
-        wait_id('FilterRadioButtonList_0').click()
-        time.sleep(1)
         wait_xpath('//*[@id="SearchTextBox"]').send_keys(each)
         time.sleep(1)
         wait_xpath('//*[@id="SearchButton"]').click()
@@ -116,6 +116,7 @@ for each in loannum:
         switch_to_frame(0)
         status = wait_xpath('//*[@id="PipelineRow1"]/td[6]')
         assert status.text == 'PC Review Completed'
+        print(str(each) + ': Ok')
 
     except Exception as ex:
         errloans.append(each)
@@ -125,5 +126,6 @@ for each in loannum:
 
     finally:
         switch_to_default_content()
-        driver.refresh()
-        time.sleep(5)
+        switch_to_frame(0)
+        switch_to_frame(0)
+        wait_xpath('//*[@id="SearchTextBox"]').clear()

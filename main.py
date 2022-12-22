@@ -84,6 +84,7 @@ def switch_to_default_content():
 driver = webdriver.Chrome()
 driver.maximize_window()
 driver.get('https://portal.admortgage.com/Default.aspx')
+time.sleep(5)
 
 wait_frame_id('contentFrame')
 
@@ -91,12 +92,12 @@ username = wait_xpath('//*[@id="UserName"]')
 password = wait_xpath('//*[@id="Password"]')
 login = wait_xpath('//*[@id="LoginButton"]')
 
-username.send_keys(login)
-password.send_keys(password)
+username.send_keys()
+password.send_keys()
 login.click()
 time.sleep(5)
 
-df = pd.read_excel('C:/Users/serg.pudikov/QA Files/Change loan status.xlsx', sheet_name='Sheet1')
+df = pd.read_excel('C:/Users/serg.pudikov/QA Files/Loansss.xlsx', sheet_name='Sheet1')
 loannum = df['loannu']
 print(loannum)
 okloans = []
@@ -124,7 +125,7 @@ for each in loannum:
         action.double_click(a)
         action.perform()
         switch_to_default_content()
-        time.sleep(7)
+        time.sleep(10)
 
         wait_id('Change Status').click()
         time.sleep(5)
@@ -138,11 +139,12 @@ for each in loannum:
         switch_to_default_content()
 
         wait_xpath('//*[@id="btnOkay"]').click()
-        time.sleep(7)
+        time.sleep(10)
 
         okloans.append(each)
         df1 = pd.DataFrame(data={'ok loans': okloans})
         df1.to_excel('C:/Users/serg.pudikov/QA Files/okloans.xlsx')
+        print(str(each) + ': Ok')
 
         assert wait_xpath('//*[@id="Row30"]/td[2]').text == 'PC Review Completed'
 
@@ -154,7 +156,30 @@ for each in loannum:
         print(str(each) + ': Something went wrong')
 
     finally:
-        switch_to_default_content()
-        wait_id('ExitLoanli').click()
+        driver.refresh()
         time.sleep(5)
+        switch_to_default_content()
+        switch_to_frame(0)
+        switch_to_frame(0)
+        wait_id('FilterRadioButtonList_0').click()
+        time.sleep(1)
+        wait_xpath('//*[@id="SearchTextBox"]').send_keys(each)
+        time.sleep(2)
+        wait_xpath('//*[@id="SearchButton"]').click()
+        switch_to_default_content()
+        time.sleep(2)
+
+        switch_to_frame(0)
+        switch_to_frame(0)
+        switch_to_frame(0)
+        time.sleep(2)
+        action = ActionChains(driver)
+        a = wait_xpath('//*[@id="PipelineRow1"]/td[2]')
+        action.double_click(a)
+        action.perform()
+        switch_to_default_content()
+        time.sleep(10)
+
+        wait_id('ExitLoanli').click()
+        time.sleep(10)
         driver.refresh()
